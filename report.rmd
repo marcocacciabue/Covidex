@@ -1,0 +1,89 @@
+---
+title: "Covidex report"
+output: html_document
+params:
+  n: NA
+---
+This report was created using the **Covidex v`r version()`** software for subtyping of genome sequences.<br />  **Covidex** can be accessed online at  http://covidex.unlu.edu.ar/.<br />
+
+Covidex was built using RShiny by Marco Cacciabue and Pablo Aguilera. <br /> 
+
+If you use Covidex please consider citing the following preprint: https://www.biorxiv.org/content/10.1101/2020.08.21.261347v1
+<br /> 
+
+For more information please visit **Covidex download site**(https://sourceforge.net/projects/covidex/).
+<br />
+
+<h2>Run stats</h2>
+Run was performed by user *`r input$user`* on `r Sys.Date()`.<br />
+Input file *`r input$file[1,1]`* from which **`r as.character(length(data_reactive()$data_out$label))`** sequences were selected for analysis.<br />
+
+<h2>Output table</h2>
+The following table lists the sequences under analysis and the corresponding classification results. 
+
+```{r,echo=FALSE, warning=FALSE,message=FALSE}
+# The `params` object is available in the document.
+
+col<-brewer.pal(5,"Blues")
+col2<-brewer.pal(5,"Reds")
+
+table<-table()
+  datatable(table,selection = 'single',
+            extensions = 'Buttons',
+            options = list(
+               columnDefs = list(list(targets = c(8,9,10,12,14), visible = FALSE)),
+              dom = 'Bfrtip',
+              lengthMenu = list(c(5, 15, -1), c('5', '15', 'All')),
+              pageLength = 15,
+              buttons =
+                list('copy', 'print', list(
+                  extend = 'collection',
+                  buttons = list(
+                    list(extend = 'csv', filename = paste(input$file[1,1],"covidex_results"),sep=""),
+                    list(extend = 'excel', filename = paste(input$file[1,1],"covidex_results"),sep=""),
+                    list(extend = 'pdf', filename = paste(input$file[1,1],"covidex_results"),sep="")),
+                  text = 'Download'
+                )
+                )
+            ))%>% formatStyle("Rambaut","FLAG",
+                     backgroundColor = styleEqual(c(0, 1), c(col[1], col[3])))%>% formatStyle("Length","Length_QC",
+                     backgroundColor = styleEqual(c(0, 1), c(col2[3], col2[1])))%>% formatStyle("N","N_QC",
+                     backgroundColor = styleEqual(c(0, 1), c(col2[3], col2[1]))) 
+```
+<h2>Variants of Concern report</h2>
+**`r as.character((sum(data_reactive()$data_out$VOC==TRUE)))`** of the **`r as.character(length(data_reactive()$data_out$label))`** sequences in the analysis were labeled as putative VOC variants. In this sense, the following pie chart shows the percentage of VOC variants detected (true=VOC, false=non-VOC).
+```{r,echo=FALSE, warning=FALSE,message=FALSE}
+# The `params` object is available in the document.
+
+table<-table()
+data<-data.frame(Rambaut=table$Rambaut,VOC=table$VOC)
+plot_ly(data,labels = ~VOC,type = 'pie')
+if (sum(data$VOC)>0){
+data<-data[data$VOC==TRUE,]
+plot_ly(data,labels = ~Rambaut,type = 'pie')
+}
+
+```
+<h2>Variants of Interest report</h2>
+**`r as.character((sum(data_reactive()$data_out$VOI==TRUE)))`** of the **`r as.character(length(data_reactive()$data_out$label))`** sequences in the analysis were labeled as putative VOI variants. In this sense, the following pie chart shows the percentage of VOI variants detected (true=VOI, false=non-VOI).
+```{r,echo=FALSE, warning=FALSE,message=FALSE}
+# The `params` object is available in the document.
+
+table<-table()
+data<-data.frame(Rambaut=table$Rambaut,VOI=table$VOI)
+plot_ly(data,labels = ~VOI,type = 'pie')
+if (sum(data$VOI)>0){
+data<-data[data$VOI==TRUE,]
+plot_ly(data,labels = ~Rambaut,type = 'pie',marker = list(colors = c('#FF7F0E', '#1F77B4')))
+}
+
+```
+Variants of concern (VOC) and variants of Interest (VOI) are defined accorded to https://www.cdc.gov/coronavirus/2019-ncov/cases-updates/variant-surveillance/variant-info.html
+<h2>Classification models</h2>
+The following table lists the models used for the classification. 
+```{r,echo=FALSE, warning=FALSE,message=FALSE}
+# The `params` object is available in the document.
+
+model_data<-model_table()
+  datatable(model_data)
+```
