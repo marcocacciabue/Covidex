@@ -13,7 +13,7 @@
 # wrapper for shiny::shinyApp()
 launchApp <- function() {
   library(shiny)
-  appDir <- system.file("app", package = "Covidex")
+  appDir <- system.file("app", package = "covidex")
   if (appDir == "") {
     stop("Could not find myapp. Try re-installing `mypackage`.", call. = FALSE)
   }

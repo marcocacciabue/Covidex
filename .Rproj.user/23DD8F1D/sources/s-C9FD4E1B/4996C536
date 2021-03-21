@@ -3,7 +3,7 @@
     "path": "~/GitHub/Covidex/R/launchApp.R",
     "project_path": "R/launchApp.R",
     "type": "r_source",
-    "hash": "0",
+    "hash": "3787382699",
     "contents": "",
     "dirty": false,
     "created": 1616286551759.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "15,49",
+        "cursorPosition": "15,43",
         "scrollLine": "5"
     },
     "folds": "",
-    "lastKnownWriteTime": 1616286641,
+    "lastKnownWriteTime": 1616286834,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1616286641497,
+    "last_content_update": 1616286834538,
     "read_only": false,
     "read_only_alternatives": []
 }
