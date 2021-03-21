@@ -17,7 +17,7 @@ Sys.setenv(LIBGL_ALWAYS_SOFTWARE=1)
 library(RColorBrewer)
 library(parallel)
 
-library(shinylogs)
+# library(shinylogs)
 
 ui <- fluidPage(
  theme = shinytheme("simplex"),
@@ -89,7 +89,7 @@ fluidRow(
 )
 )
 server <- shinyServer(function(input, output, session) {
-  track_usage(storage_mode = store_json(path = "logs/"))
+  # track_usage(storage_mode = store_json(path = "logs/"))
   introjs(session)
   hintjs(session, options = list("hintButtonLabel"="Done!"))
   observeEvent(input$btn,
